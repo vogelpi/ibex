@@ -113,6 +113,7 @@ parameters:
     paramtype: vlogparam
     description: "Number of PMP regions"
 
+
   MHPMCounterNum:
     datatype: int
     paramtype: vlogparam
@@ -124,6 +125,12 @@ parameters:
     paramtype: vlogparam
     default: 40
     description: Bit width of performance monitor event counters [32/64]
+
+  XInterface:
+    datatype: int
+    default: 0
+    paramtype: vlogparam
+    description: "Enables the RISC-V Extension Interface (EXPERIMENTAL) [0/1]"
 
 targets:
   default: &default_target
@@ -155,6 +162,7 @@ targets:
       - PMPNumRegions
       - MHPMCounterNum
       - MHPMCounterWidth
+      - XInterface
     default_tool: verilator
     tools:
       verilator:

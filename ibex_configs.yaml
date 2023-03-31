@@ -34,6 +34,7 @@ small:
   PMPNumRegions            : 4
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
+  XInterface               : 0
 
 # Configuration to match that used in the OpenTitan project
 opentitan:
@@ -54,6 +55,7 @@ opentitan:
   PMPNumRegions            : 16
   MHPMCounterNum           : 10
   MHPMCounterWidth         : 32
+  XInterface               : 0
 
 # Three-stage pipeline with additional branch traget ALU and 1 cycle multiplier
 # (2 cycles for mulh) so mul does not stall (mulh stall 1 cycles). This is the
@@ -77,6 +79,7 @@ maxperf:
   PMPNumRegions            : 4
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
+  XInterface               : 0
 
 # maxperf config above with balanced bitmanip extension and PMP
 maxperf-pmp-bmbalanced:
@@ -97,6 +100,7 @@ maxperf-pmp-bmbalanced:
   PMPNumRegions            : 16
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
+  XInterface               : 0
 
 # ========================
 # * OTHER CONFIGURATIONS *
@@ -123,7 +127,7 @@ maxperf-pmp:
   PMPNumRegions            : 16
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
-
+  XInterface               : 0
 
 # maxperf-pmp config above with full bitmanip extension
 maxperf-pmp-bmfull:
@@ -144,6 +148,7 @@ maxperf-pmp-bmfull:
   PMPNumRegions            : 16
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
+  XInterface               : 0
 
 # maxperf-pmp-bmfull config above with icache enabled
 maxperf-pmp-bmfull-icache:
@@ -164,7 +169,7 @@ maxperf-pmp-bmfull-icache:
   PMPNumRegions            : 16
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
-
+  XInterface               : 0
 
 # ===============================
 # * EXPERIMENTAL CONFIGURATIONS *
@@ -191,4 +196,67 @@ experimental-branch-predictor:
   PMPNumRegions            : 4
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
+  XInterface               : 0
 
+# Small with X-Interface
+small-cvxif:
+  RV32E                    : 0
+  RV32M                    : "ibex_pkg::RV32MFast"
+  RV32B                    : "ibex_pkg::RV32BNone"
+  RegFile                  : "ibex_pkg::RegFileFF"
+  BranchTargetALU          : 0
+  WritebackStage           : 0
+  ICache                   : 0
+  ICacheECC                : 0
+  ICacheScramble           : 0
+  BranchPredictor          : 0
+  DbgTriggerEn             : 0
+  SecureIbex               : 0
+  PMPEnable                : 0
+  PMPGranularity           : 0
+  PMPNumRegions            : 4
+  MHPMCounterNum           : 0
+  MHPMCounterWidth         : 40
+  XInterface               : 1
+
+# Opentitan with X-Interface
+opentitan-cvxif:
+  RV32E                    : 0
+  RV32M                    : "ibex_pkg::RV32MSingleCycle"
+  RV32B                    : "ibex_pkg::RV32BOTEarlGrey"
+  RegFile                  : "ibex_pkg::RegFileFF"
+  BranchTargetALU          : 1
+  WritebackStage           : 1
+  ICache                   : 1
+  ICacheECC                : 1
+  ICacheScramble           : 1
+  BranchPredictor          : 0
+  DbgTriggerEn             : 1
+  SecureIbex               : 1
+  PMPEnable                : 1
+  PMPGranularity           : 0
+  PMPNumRegions            : 16
+  MHPMCounterNum           : 10
+  MHPMCounterWidth         : 32
+  XInterface               : 1
+
+# experimental-maxperf-pmp config with X-Interface
+experimental-maxperf-pmp-bmfull-cvxif:
+  RV32E                    : 0
+  RV32M                    : "ibex_pkg::RV32MSingleCycle"
+  RV32B                    : "ibex_pkg::RV32BFull"
+  RegFile                  : "ibex_pkg::RegFileFF"
+  BranchTargetALU          : 1
+  WritebackStage           : 1
+  ICache                   : 0
+  ICacheECC                : 0
+  ICacheScramble           : 0
+  BranchPredictor          : 0
+  DbgTriggerEn             : 0
+  SecureIbex               : 0
+  PMPEnable                : 1
+  PMPGranularity           : 0
+  PMPNumRegions            : 16
+  MHPMCounterNum           : 0
+  MHPMCounterWidth         : 40
+  XInterface               : 1

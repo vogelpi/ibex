@@ -32,6 +32,7 @@ module ibex_riscv_compliance (
   parameter bit SecureIbex                = 1'b0;
   parameter bit ICacheScramble            = 1'b0;
   parameter bit DbgTriggerEn              = 1'b0;
+  parameter bit XInterface                = 1'b0;
 
   logic clk_sys, rst_sys_n;
 
@@ -156,7 +157,8 @@ module ibex_riscv_compliance (
       .SecureIbex       (SecureIbex        ),
       .ICacheScramble   (ICacheScramble    ),
       .DmHaltAddr       (32'h00000000      ),
-      .DmExceptionAddr  (32'h00000000      )
+      .DmExceptionAddr  (32'h00000000      ),
+      .XInterface       (XInterface        )
     ) u_top (
       .clk_i                  (clk_sys              ),
       .rst_ni                 (rst_sys_n            ),
@@ -208,7 +210,12 @@ module ibex_riscv_compliance (
       .alert_minor_o          (                     ),
       .alert_major_internal_o (                     ),
       .alert_major_bus_o      (                     ),
-      .core_sleep_o           (                     )
+      .core_sleep_o           (                     ),
+
+      .x_compressed_valid_o   (                     ),
+      .x_compressed_ready_i   (1'b0                 ),
+      .x_compressed_req_o     (                     ),
+      .x_compressed_resp_i    ('0                   )
     );
 
   // SRAM block for instruction and data storage

@@ -67,6 +67,7 @@ module core_ibex_tb_top;
   parameter bit SecureIbex                = 1'b0;
   parameter bit ICacheScramble            = 1'b0;
   parameter bit DbgTriggerEn              = 1'b0;
+  parameter bit XInterface                = 1'b0;
 
   // Scrambling interface instantiation
   logic [ibex_pkg::SCRAMBLE_KEY_W-1:0]   scramble_key;
@@ -102,8 +103,8 @@ module core_ibex_tb_top;
     .SecureIbex       (SecureIbex       ),
     .ICacheScramble   (ICacheScramble   ),
     .BranchPredictor  (BranchPredictor  ),
-    .DbgTriggerEn     (DbgTriggerEn     )
-
+    .DbgTriggerEn     (DbgTriggerEn     ),
+    .XInterface       (XInterface       )
   ) dut (
     .clk_i                  (clk                        ),
     .rst_ni                 (rst_n                      ),
@@ -154,7 +155,12 @@ module core_ibex_tb_top;
     .alert_minor_o          (dut_if.alert_minor         ),
     .alert_major_internal_o (dut_if.alert_major_internal),
     .alert_major_bus_o      (dut_if.alert_major_bus     ),
-    .core_sleep_o           (dut_if.core_sleep          )
+    .core_sleep_o           (dut_if.core_sleep          ),
+
+    .x_compressed_valid_o   (                           ),
+    .x_compressed_ready_i   (1'b0                       ),
+    .x_compressed_req_o     (                           ),
+    .x_compressed_resp_i    ('0                         )
   );
 
   // We should never see any alerts triggered in normal testing

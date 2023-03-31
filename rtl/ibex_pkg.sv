@@ -663,4 +663,23 @@ package ibex_pkg;
   // and core_busy signals within `ibex_core` may need adjusting.
   parameter ibex_mubi_t IbexMuBiOn  = 4'b0101;
   parameter ibex_mubi_t IbexMuBiOff = 4'b1010;
+
+  ////////////////
+  // CORE_V_XIF //
+  ////////////////
+  // Documentation page: https://docs.openhwgroup.org/projects/openhw-group-core-v-xif/en/latest/
+
+  parameter int X_ID_WIDTH  = 4;
+
+  typedef struct packed {
+    logic [15:0]           instr;
+    priv_lvl_e             mode;
+    logic [X_ID_WIDTH-1:0] id;
+  } x_compressed_req_t;
+
+  typedef struct packed {
+    logic [31:0] instr;
+    logic        accept;
+  } x_compressed_resp_t;
+
 endpackage
