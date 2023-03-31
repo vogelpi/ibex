@@ -23,7 +23,8 @@ module ibex_cs_registers #(
   parameter int unsigned      PMPNumRegions     = 4,
   parameter bit               RV32E             = 0,
   parameter ibex_pkg::rv32m_e RV32M             = ibex_pkg::RV32MFast,
-  parameter ibex_pkg::rv32b_e RV32B             = ibex_pkg::RV32BNone
+  parameter ibex_pkg::rv32b_e RV32B             = ibex_pkg::RV32BNone,
+  parameter bit               XInterface        = 1'b1
 ) (
   // Clock and Reset
   input  logic                 clk_i,
@@ -118,7 +119,11 @@ module ibex_cs_registers #(
   input  logic                 mem_store_i,                 // store to memory in this cycle
   input  logic                 dside_wait_i,                // core waiting for the dside
   input  logic                 mul_wait_i,                  // core waiting for multiply
-  input  logic                 div_wait_i                   // core waiting for divide
+  input  logic                 div_wait_i,                  // core waiting for divide
+  // For X-Interface
+  output logic [5:0]           ecs_rd_o,
+  input  logic [5:0]           ecs_wr_i,
+  input  logic [2:0]           ecs_wen_i
 );
 
   import ibex_pkg::*;
@@ -158,14 +163,18 @@ module ibex_cs_registers #(
     | (0                 << 18)  // S - Supervisor mode implemented
     | (1                 << 20)  // U - User mode implemented
     | (RV32BExtra        << 23)  // X - Non-standard extensions present
-    | (32'(CSR_MISA_MXL) << 30); // M-XLEN
+    | (32'(CSR_MISA_MXL) << 30)  // M-XLEN
+    | (XInterface ? X_MISA : 32'b0); // X-Interface MISA
 
   typedef struct packed {
-    logic      mie;
-    logic      mpie;
-    priv_lvl_e mpp;
-    logic      mprv;
-    logic      tw;
+    logic       mie;
+    logic       mpie;
+    logic [1:0] vs;
+    priv_lvl_e  mpp;
+    logic [1:0] fs;
+    logic [1:0] xs;
+    logic       mprv;
+    logic       tw;
   } status_t;
 
   typedef struct packed {
@@ -344,7 +353,10 @@ module ibex_cs_registers #(
         csr_rdata_int                                                   = '0;
         csr_rdata_int[CSR_MSTATUS_MIE_BIT]                              = mstatus_q.mie;
         csr_rdata_int[CSR_MSTATUS_MPIE_BIT]                             = mstatus_q.mpie;
+        csr_rdata_int[CSR_MSTATUS_VS_BIT_HIGH:CSR_MSTATUS_VS_BIT_LOW]   = mstatus_q.vs;
         csr_rdata_int[CSR_MSTATUS_MPP_BIT_HIGH:CSR_MSTATUS_MPP_BIT_LOW] = mstatus_q.mpp;
+        csr_rdata_int[CSR_MSTATUS_FS_BIT_HIGH:CSR_MSTATUS_FS_BIT_LOW]   = mstatus_q.fs;
+        csr_rdata_int[CSR_MSTATUS_XS_BIT_HIGH:CSR_MSTATUS_XS_BIT_LOW]   = mstatus_q.xs;
         csr_rdata_int[CSR_MSTATUS_MPRV_BIT]                             = mstatus_q.mprv;
         csr_rdata_int[CSR_MSTATUS_TW_BIT]                               = mstatus_q.tw;
       end
@@ -609,7 +621,10 @@ module ibex_cs_registers #(
           mstatus_d    = '{
               mie:  csr_wdata_int[CSR_MSTATUS_MIE_BIT],
               mpie: csr_wdata_int[CSR_MSTATUS_MPIE_BIT],
+              vs:   csr_wdata_int[CSR_MSTATUS_VS_BIT_HIGH:CSR_MSTATUS_VS_BIT_LOW],
               mpp:  priv_lvl_e'(csr_wdata_int[CSR_MSTATUS_MPP_BIT_HIGH:CSR_MSTATUS_MPP_BIT_LOW]),
+              fs:   csr_wdata_int[CSR_MSTATUS_FS_BIT_HIGH:CSR_MSTATUS_FS_BIT_LOW],
+              xs:   mstatus_q.xs,
               mprv: csr_wdata_int[CSR_MSTATUS_MPRV_BIT],
               tw:   csr_wdata_int[CSR_MSTATUS_TW_BIT]
           };
@@ -706,6 +721,11 @@ module ibex_cs_registers #(
         default:;
       endcase
     end
+
+    // Extension Context Status write from X-Interface
+    if (ecs_wen_i[2]) mstatus_d.xs = ecs_wr_i[5:4];
+    if (ecs_wen_i[1]) mstatus_d.fs = ecs_wr_i[3:2];
+    if (ecs_wen_i[0]) mstatus_d.vs = ecs_wr_i[1:0];
 
     // exception controller gets priority over other writes
     unique case (1'b1)
@@ -859,7 +879,10 @@ module ibex_cs_registers #(
   // MSTATUS
   localparam status_t MSTATUS_RST_VAL = '{mie:  1'b0,
                                           mpie: 1'b1,
+                                          vs:   2'b0,
                                           mpp:  PRIV_LVL_U,
+                                          fs:   2'b0,
+                                          xs:   X_ECS_XS,
                                           mprv: 1'b0,
                                           tw:   1'b0};
   ibex_csr #(
@@ -1674,6 +1697,12 @@ module ibex_cs_registers #(
 
   assign csr_shadow_err_o =
     mstatus_err | mtvec_err | pmp_csr_err | cpuctrlsts_part_err | cpuctrlsts_ic_scr_key_err;
+
+  /////////////////
+  // X-Interface //
+  /////////////////
+
+  assign ecs_rd_o = {mstatus_q.xs, mstatus_q.fs, mstatus_q.vs};
 
   ////////////////
   // Assertions //

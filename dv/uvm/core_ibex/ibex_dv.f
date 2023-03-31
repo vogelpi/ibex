@@ -36,6 +36,8 @@ ${LOWRISC_IP_DIR}/ip/prim/rtl/prim_ram_1p_pkg.sv
 ${LOWRISC_IP_DIR}/ip/prim/rtl/prim_ram_1p_adv.sv
 ${LOWRISC_IP_DIR}/ip/prim/rtl/prim_ram_1p_scr.sv
 ${LOWRISC_IP_DIR}/ip/prim_generic/rtl/prim_generic_ram_1p.sv
+${LOWRISC_IP_DIR}/ip/prim/rtl/prim_fifo_sync.sv
+${LOWRISC_IP_DIR}/ip/prim/rtl/prim_fifo_sync_cnt.sv
 ${PRJ_DIR}/dv/uvm/core_ibex/common/prim/prim_ram_1p.sv
 ${LOWRISC_IP_DIR}/ip/prim_generic/rtl/prim_generic_clock_gating.sv
 ${PRJ_DIR}/dv/uvm/core_ibex/common/prim/prim_clock_gating.sv
@@ -98,6 +100,7 @@ ${PRJ_DIR}/rtl/ibex_pmp.sv
 ${PRJ_DIR}/rtl/ibex_core.sv
 ${PRJ_DIR}/rtl/ibex_top.sv
 ${PRJ_DIR}/rtl/ibex_top_tracing.sv
+${PRJ_DIR}/rtl/ibex_xif_issue_commit_buffer.sv
 
 // Core DV files
 +incdir+${PRJ_DIR}/dv/uvm/core_ibex/common
