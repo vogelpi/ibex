@@ -36,6 +36,7 @@ module ibex_top import ibex_pkg::*; #(
   parameter int unsigned DmHaltAddr       = 32'h1A110800,
   parameter int unsigned DmExceptionAddr  = 32'h1A110808,
   parameter bit          XInterface       = 1'b1,
+  parameter bit          MemInterface     = 1'b0,
   // Default seed and nonce for scrambling
   parameter logic [SCRAMBLE_KEY_W-1:0]   RndCnstIbexKey   = RndCnstIbexKeyDefault,
   parameter logic [SCRAMBLE_NONCE_W-1:0] RndCnstIbexNonce = RndCnstIbexNonceDefault
@@ -153,6 +154,14 @@ module ibex_top import ibex_pkg::*; #(
   // Commit Interface
   output logic                         x_commit_valid_o,
   output x_commit_t                    x_commit_o,
+  // Memory Interface
+  input  logic                         x_mem_valid_i,
+  output logic                         x_mem_ready_o,
+  input  x_mem_req_t                   x_mem_req_i,
+  output x_mem_resp_t                  x_mem_resp_o,
+  // Memory Result Interface
+  output logic                         x_mem_result_valid_o,
+  output x_mem_result_t                x_mem_result_o,
   // Result Interface
   input  logic                         x_result_valid_i,
   output logic                         x_result_ready_o,
@@ -326,7 +335,8 @@ module ibex_top import ibex_pkg::*; #(
     .MemDataWidth     (MemDataWidth),
     .DmHaltAddr       (DmHaltAddr),
     .DmExceptionAddr  (DmExceptionAddr),
-    .XInterface       (XInterface)
+    .XInterface       (XInterface),
+    .MemInterface     (MemInterface)
   ) u_ibex_core (
     .clk_i(clk),
     .rst_ni,
@@ -437,6 +447,12 @@ module ibex_top import ibex_pkg::*; #(
     .x_issue_resp_i,
     .x_commit_valid_o,
     .x_commit_o,
+    .x_mem_valid_i,
+    .x_mem_ready_o,
+    .x_mem_req_i,
+    .x_mem_resp_o,
+    .x_mem_result_valid_o,
+    .x_mem_result_o,
     .x_result_valid_i,
     .x_result_ready_o,
     .x_result_i
@@ -822,6 +838,12 @@ module ibex_top import ibex_pkg::*; #(
       x_issue_resp_i,
       x_commit_valid_o,
       x_commit_o,
+      x_mem_valid_i,
+      x_mem_ready_o,
+      x_mem_req_i,
+      x_mem_resp_o,
+      x_mem_result_valid_o,
+      x_mem_result_o,
       x_result_valid_i,
       x_result_ready_o,
       x_result_i,
@@ -895,6 +917,12 @@ module ibex_top import ibex_pkg::*; #(
     x_issue_resp_t                x_issue_resp_local;
     logic                         x_commit_valid_local;
     x_commit_t                    x_commit_local;
+    logic                         x_mem_valid_local;
+    logic                         x_mem_ready_local;
+    x_mem_req_t                   x_mem_req_local;
+    x_mem_resp_t                  x_mem_resp_local;
+    logic                         x_mem_result_valid_local;
+    x_mem_result_t                x_mem_result_local;
     logic                         x_result_valid_local;
     logic                         x_result_ready_local;
     x_result_t                    x_result_local;
@@ -956,6 +984,12 @@ module ibex_top import ibex_pkg::*; #(
       x_issue_resp_i,
       x_commit_valid_o,
       x_commit_o,
+      x_mem_valid_i,
+      x_mem_ready_o,
+      x_mem_req_i,
+      x_mem_resp_o,
+      x_mem_result_valid_o,
+      x_mem_result_o,
       x_result_valid_i,
       x_result_ready_o,
       x_result_i,
@@ -1019,6 +1053,12 @@ module ibex_top import ibex_pkg::*; #(
       x_issue_resp_local,
       x_commit_valid_local,
       x_commit_local,
+      x_mem_valid_local,
+      x_mem_ready_local,
+      x_mem_req_local,
+      x_mem_resp_local,
+      x_mem_result_valid_local,
+      x_mem_result_local,
       x_result_valid_local,
       x_result_ready_local,
       x_result_local,
@@ -1076,7 +1116,8 @@ module ibex_top import ibex_pkg::*; #(
       .MemECC           (MemECC),
       .DmHaltAddr       (DmHaltAddr),
       .DmExceptionAddr  (DmExceptionAddr),
-      .XInterface       (XInterface)
+      .XInterface       (XInterface),
+      .MemInterface     (MemInterface)
     ) u_ibex_lockstep (
       .clk_i                  (clk),
       .rst_ni                 (rst_ni),
@@ -1153,6 +1194,12 @@ module ibex_top import ibex_pkg::*; #(
       .x_issue_resp_i         (x_issue_resp_local),
       .x_commit_valid_i       (x_commit_valid_local),
       .x_commit_i             (x_commit_local),
+      .x_mem_valid_i          (x_mem_valid_local),
+      .x_mem_ready_i          (x_mem_ready_local),
+      .x_mem_req_i            (x_mem_req_local),
+      .x_mem_resp_i           (x_mem_resp_local),
+      .x_mem_result_valid_i   (x_mem_result_valid_local),
+      .x_mem_result_i         (x_mem_result_local),
       .x_result_valid_i       (x_result_valid_local),
       .x_result_ready_i       (x_result_ready_local),
       .x_result_i             (x_result_local)

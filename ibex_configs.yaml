@@ -35,6 +35,7 @@ small:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 0
+  MemInterface             : 0
 
 # Configuration to match that used in the OpenTitan project
 opentitan:
@@ -56,6 +57,7 @@ opentitan:
   MHPMCounterNum           : 10
   MHPMCounterWidth         : 32
   XInterface               : 0
+  MemInterface             : 0
 
 # Three-stage pipeline with additional branch traget ALU and 1 cycle multiplier
 # (2 cycles for mulh) so mul does not stall (mulh stall 1 cycles). This is the
@@ -80,6 +82,7 @@ maxperf:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 0
+  MemInterface             : 0
 
 # maxperf config above with balanced bitmanip extension and PMP
 maxperf-pmp-bmbalanced:
@@ -101,6 +104,7 @@ maxperf-pmp-bmbalanced:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 0
+  MemInterface             : 0
 
 # ========================
 # * OTHER CONFIGURATIONS *
@@ -128,6 +132,7 @@ maxperf-pmp:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 0
+  MemInterface             : 0
 
 # maxperf-pmp config above with full bitmanip extension
 maxperf-pmp-bmfull:
@@ -149,6 +154,7 @@ maxperf-pmp-bmfull:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 0
+  MemInterface             : 0
 
 # maxperf-pmp-bmfull config above with icache enabled
 maxperf-pmp-bmfull-icache:
@@ -170,6 +176,7 @@ maxperf-pmp-bmfull-icache:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 0
+  MemInterface             : 0
 
 # ===============================
 # * EXPERIMENTAL CONFIGURATIONS *
@@ -197,6 +204,7 @@ experimental-branch-predictor:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 0
+  MemInterface             : 0
 
 # Small with X-Interface
 small-cvxif:
@@ -218,6 +226,7 @@ small-cvxif:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 1
+  MemInterface             : 1
 
 # Opentitan with X-Interface
 opentitan-cvxif:
@@ -239,6 +248,7 @@ opentitan-cvxif:
   MHPMCounterNum           : 10
   MHPMCounterWidth         : 32
   XInterface               : 1
+  MemInterface             : 1
 
 # experimental-maxperf-pmp config with X-Interface
 experimental-maxperf-pmp-bmfull-cvxif:
@@ -260,3 +270,4 @@ experimental-maxperf-pmp-bmfull-cvxif:
   MHPMCounterNum           : 0
   MHPMCounterWidth         : 40
   XInterface               : 1
+  MemInterface             : 1

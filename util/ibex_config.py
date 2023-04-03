@@ -38,7 +38,8 @@ class Config:
         ('PMPNumRegions', int),
         ('MHPMCounterNum', int),
         ('MHPMCounterWidth', int),
-        ('XInterface', bool)
+        ('XInterface', bool),
+        ('MemInterface', bool)
     ]
 
     def __init__(self, yml):
@@ -78,6 +79,7 @@ class Config:
         self.mhpm_counter_num = Config.read_int('MHPMCounterNum', yml)
         self.mhpm_counter_width = Config.read_int('MHPMCounterWidth', yml)
         self.xinterface = Config.read_bool('XInterface', yml)
+        self.meminterface = Config.read_bool('MemInterface', yml)
 
     @staticmethod
     def read_bool(fld, yml):

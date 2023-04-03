@@ -68,6 +68,7 @@ module core_ibex_tb_top;
   parameter bit ICacheScramble            = 1'b0;
   parameter bit DbgTriggerEn              = 1'b0;
   parameter bit XInterface                = 1'b0;
+  parameter bit MemInterface              = 1'b0;
 
   // Scrambling interface instantiation
   logic [ibex_pkg::SCRAMBLE_KEY_W-1:0]   scramble_key;
@@ -104,7 +105,8 @@ module core_ibex_tb_top;
     .ICacheScramble   (ICacheScramble   ),
     .BranchPredictor  (BranchPredictor  ),
     .DbgTriggerEn     (DbgTriggerEn     ),
-    .XInterface       (XInterface       )
+    .XInterface       (XInterface       ),
+    .MemInterface     (MemInterface     )
   ) dut (
     .clk_i                  (clk                        ),
     .rst_ni                 (rst_n                      ),
@@ -167,6 +169,12 @@ module core_ibex_tb_top;
     .x_issue_resp_i         ('0                         ),
     .x_commit_valid_o       (                           ),
     .x_commit_o             (                           ),
+    .x_mem_valid_i          (1'b0                       ),
+    .x_mem_ready_o          (                           ),
+    .x_mem_req_i            ('0                         ),
+    .x_mem_resp_o           (                           ),
+    .x_mem_result_valid_o   (                           ),
+    .x_mem_result_o         (                           ),
     .x_result_valid_i       (1'b0                       ),
     .x_result_ready_o       (                           ),
     .x_result_i             ('0                         )
