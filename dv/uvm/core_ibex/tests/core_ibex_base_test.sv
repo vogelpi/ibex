@@ -52,6 +52,7 @@ class core_ibex_base_test extends uvm_test;
     bit     RV32E;
     rv32m_e RV32M;
     rv32b_e RV32B;
+    bit     XInterface;
     string  isa;
 
     if (!uvm_config_db#(bit)::get(null, "", "RV32E", RV32E)) begin
@@ -63,11 +64,15 @@ class core_ibex_base_test extends uvm_test;
     if (!uvm_config_db#(rv32b_e)::get(null, "", "RV32B", RV32B)) begin
       `uvm_fatal(`gfn, "Cannot get RV32B parameter")
     end
+    if (!uvm_config_db#(bit)::get(null, "", "XInterface", XInterface)) begin
+      `uvm_fatal(`gfn, "Cannot get XInterface parameter")
+    end
 
     // Construct the right ISA string for the cosimulator by looking at top-level testbench
     // parameters.
     isa = {"rv32", RV32E ? "e" : "i"};
     if (RV32M != RV32MNone) isa = {isa, "m"};
+    if (XInterface) isa = {isa, "f"};
     isa = {isa, "c"};
     case (RV32B)
       RV32BNone:

@@ -21,7 +21,7 @@
 parameter int XLEN = 32;
 
 // GPR setting
-parameter int NUM_FLOAT_GPR = 0;
+parameter int NUM_FLOAT_GPR = 32;
 parameter int NUM_GPR = 32;
 parameter int NUM_VEC_GPR = 0;
 
@@ -55,10 +55,11 @@ bit support_unaligned_load_store = 1'b1;
 // TODO: Determine how Ibex RV32B types map to RISCV-DV ISA names
 riscv_instr_group_t supported_isa[$] = {RV32I, RV32M, RV32C
 % if ibex_config['RV32B'] == 'ibex_pkg::RV32BNone':
-    };
+    ,
 % else:
-    ,RV32ZBA, RV32ZBB, RV32ZBC, RV32ZBS, RV32B};
+    ,RV32ZBA, RV32ZBB, RV32ZBC, RV32ZBS, RV32B,
 % endif
+  RV32F, RV32FC};
 
 // Interrupt mode support
 mtvec_mode_t supported_interrupt_mode[$] = {VECTORED};

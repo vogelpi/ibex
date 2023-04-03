@@ -96,8 +96,10 @@ def get_isas_for_config(cfg: Config) -> Tuple[str, str]:
     # NOTE: This logic should match the code in the get_isa_string() function
     # in core_ibex/tests/core_ibex_base_test.sv: keep them in sync!
     has_multiplier = cfg.rv32m != 'ibex_pkg::RV32MNone'
-    base_isa = 'rv32{}{}c'.format('e' if cfg.rv32e else 'i',
-                                  'm' if has_multiplier else '')
+    has_xinterface = cfg.xinterface is True
+    base_isa = 'rv32{}{}{}c'.format('e' if cfg.rv32e else 'i',
+                                    'm' if has_multiplier else '',
+                                    'f' if has_xinterface else '')
 
     bitmanip_mapping = {
         'ibex_pkg::RV32BNone': [],
